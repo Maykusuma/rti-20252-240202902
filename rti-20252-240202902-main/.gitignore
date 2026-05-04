@@ -1,0 +1,19 @@
+# === Private Content (ada di rti-20252-book) ===
+book/
+assets/
+templates/
+docs/
+BLUEPRINT.md
+BOOK-SPEC.md
+MASTER-ANCHOR.md
+REFERENCES.md
+PROJECT-TRACKER.md
+
+# AI internal notes
+.ai-guide.md
+
+# IDE / OS
+*.code-workspace
+.vscode/
+Thumbs.db
+.DS_Store
