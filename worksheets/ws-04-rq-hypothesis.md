@@ -67,34 +67,60 @@ Jika rantai ini tidak lengkap, RQ belum mature. Bi-directional: RQ yang tidak bi
 ```
 RQ-CONTRIBUTION-HYPOTHESIS
 
-Gap Statement  : ____________________
+Gap Statement  : Belum ada studi yang secara langsung membandingkan
+                rule-based SIEM dengan ML-based UEBA menggunakan
+                metrik yang sama (detection rate, false positive rate,
+                waktu deteksi) untuk kasus insider threat di sistem
+                enterprise secara real-time.
 
 Research Question:
-  Tipe         : [ ] Comparison  [ ] Improvement  [ ] Exploratory
-  Formulasi    : ____________________
-  Variabel IV  : ____________________
-  Variabel DV  : ____________________
-  Metrik       : ____________________
-  Dataset      : ____________________
-  Baseline     : ____________________
+  Tipe         : [ V ] Comparison  [ ] Improvement  [ ] Exploratory
+  Formulasi    : Apakah metode ML-based UEBA (Random Forest)
+              menghasilkan detection rate lebih tinggi dan
+              false positive rate lebih rendah dibandingkan
+              rule-based SIEM dalam mendeteksi insider threat
+              pada CERT Insider Threat Dataset?
+  Variabel IV  : Metode deteksi (rule-based SIEM vs
+                Random Forest berbasis UEBA)
+  Variabel DV  : Detection rate (%), false positive
+                rate (%), waktu deteksi (detik)
+  Metrik       : Detection rate, false positive rate,
+                waktu deteksi rata-rata
+  Dataset      : CERT Insider Threat Dataset r5.2 / r6.2
+  Baseline     : Rule-based SIEM (threshold & correlation
+                rules standar)
 
 Quality Check RQ:
-  [ ] Variabel spesifik
-  [ ] Metrik jelas
-  [ ] Baseline ada
-  [ ] Konteks disebutkan
-  [ ] Memerlukan eksperimen (bukan hanya survei literatur)
+  [ V ] Variabel spesifik
+  [ V ] Metrik jelas
+  [ V ] Baseline ada
+  [ V ] Konteks disebutkan
+  [ V ] Memerlukan eksperimen (bukan hanya survei literatur)
 
 Contribution Statement:
-  Apa yang baru diketahui : ____________________
-  Jenis kontribusi        : [ ] Improvement  [ ] Comparison  [ ] Novel approach
-  Gap yang diisi          : ____________________
+  Apa yang baru diketahui : Bukti empiris kuantitatif
+  tentang seberapa besar perbedaan performa rule-based
+  SIEM vs ML-based UEBA dalam mendeteksi insider threat,
+  diukur dengan metrik yang seragam dan dapat direplikasi
+  Jenis kontribusi        : [ ] Improvement  [ V ] Comparison  [ ] Novel approach
+  Gap yang diisi          : Belum adanya perbandingan langsung
+  antara kedua pendekatan dengan metrik yang sama di
+  konteks enterprise
 
 Hypothesis Pair:
-  H₀ : ____________________
-  H₁ : ____________________
-  Threshold              : ____________________
-  Justifikasi threshold  : ____________________
+  H₀ : Tidak ada perbedaan signifikan antara detection
+       rate dan false positive rate dari rule-based SIEM
+       dan ML-based UEBA (Random Forest) dalam mendeteksi
+       insider threat pada CERT Insider Threat Dataset
+  H₁ : ML-based UEBA (Random Forest) menghasilkan
+       detection rate yang lebih tinggi dan false positive
+       rate yang lebih rendah secara signifikan dibanding
+       rule-based SIEM pada dataset yang sama
+  Threshold              : α = 0.05
+  Justifikasi threshold  : Threshold 0.05 adalah standar
+    umum dalam penelitian bidang keamanan siber dan
+    informatika, digunakan juga oleh Alzaabi & Mehmood
+    (2024) dan Sherje et al. (2024)
 ```
 
 ---
@@ -103,24 +129,24 @@ Hypothesis Pair:
 
 Gunakan gap yang ditemukan di WS-03. Transformasikan menjadi Research Question.
 
-**Gap dari WS-03:** ____________________________________
+**Gap dari WS-03:** Belum ada studi yang head-to-head bandingin rule-based SIEM vs ML-based UEBA pakai metrik yang sama untuk insider threat detection di enterprise
 
 **RQ versi pertama (tulis bebas):**
-> ___________________________________________________
+> Apakah machine learning lebih baik dari SIEM untuk deteksi insider threat?
 
 **Evaluasi RQ:**
 
 | Komponen | Ada? | Isi |
 |----------|------|-----|
-| Metode spesifik | *Contoh: Ya — CNN vs RF* | |
-| Metrik terukur | | |
-| Baseline | | |
-| Dataset/konteks | | |
+| Metode spesifik | Ya | Rule-based SIEM vs Random Forest (ML-based UEBA) |
+| Metrik terukur | Ya | Detection rate, false positive rate, waktu deteksi |
+| Baseline | Ya | Rule-based SIEM standar enterprise |
+| Dataset/konteks | Ya | CERT Insider Threat Dataset r5.2/r6.2 |
 
-**Tipe RQ:** [ ] Comparison / [ ] Improvement / [ ] Exploratory
+**Tipe RQ:** [ V ] Comparison / [ ] Improvement / [ ] Exploratory
 
 **RQ versi revisi (setelah evaluasi):**
-> ___________________________________________________
+> Apakah ML-based UEBA menggunakan Random Forest menghasilkan detection rate lebih tinggi dan false positive rate lebih rendah dibandingkan rule-based SIEM dalam mendeteksi insider threat pada CERT Insider Threat Dataset r5.2?
 
 ---
 
@@ -130,14 +156,16 @@ Rumuskan pasangan hipotesis dari RQ di Latihan 1.
 
 | Komponen | Isi |
 |----------|-----|
-| H₀ | *Contoh: Tidak ada perbedaan signifikan F1-Score antara CNN dan RF pada dataset CIC-MalMem-2022* |
-| H₁ | |
-| Metrik | |
-| Threshold | |
-| Justifikasi threshold | |
+| H₀ | Tidak ada perbedaan signifikan antara detection rate dan false positive rate dari rule-based SIEM dan ML-based UEBA (Random Forest) pada CERT Insider Threat Dataset |
+| H₁ | ML-based UEBA (Random Forest) menghasilkan detection rate lebih tinggi dan false positive rate lebih rendah secara signifikan dibanding rule-based SIEM |
+| Metrik | Detection rate (%), false positive rate (%), waktu deteksi (detik) |
+| Threshold | α = 0.05 |
+| Justifikasi threshold | Standar umum riset informatika dan keamanan siber — dipakai Alzaabi & Mehmood (2024) dan Sherje et al. (2024) untuk evaluasi model yang serupa |
 
-**Apakah hipotesis ini falsifiable?** [ ] Ya / [ ] Tidak
-> Bagaimana cara membuktikannya salah? ___________________
+**Apakah hipotesis ini falsifiable?** [ V ] Ya / [ ] Tidak
+> Bagaimana cara membuktikannya salah? Cara membuktikannya salah: kalau hasil eksperimen menunjukkan p-value > 0.05, atau detection rate RF tidak lebih tinggi dari SIEM secara statistik, maka H₁ ditolak dan H₀ tetap berlaku — artinya ML nggak terbukti lebih baik
+
+
 
 ---
 
@@ -147,14 +175,14 @@ Lengkapi rantai dari RQ hingga metode analisis.
 
 | Tahap | Isi |
 |-------|-----|
-| RQ | *Contoh: Apakah CNN menghasilkan F1-Score lebih tinggi dari RF...* |
-| Variable (IV) | *Contoh: Jenis algoritma (CNN vs RF)* |
-| Variable (DV) | |
-| Metric | |
-| Data source | |
-| Analysis method | |
+| RQ | Apakah ML-based UEBA (Random Forest) lebih baik dari rule-based SIEM dalam mendeteksi insider threat pada CERT Insider Threat Dataset? |
+| Variable (IV) | Metode deteksi: rule-based SIEM vs Random Forest berbasis UEBA |
+| Variable (DV) | Detection rate (%), false positive rate (%), waktu deteksi rata-rata (detik) |
+| Metric | Detection rate, false positive rate, F1-score, average detection time |
+| Data source | CERT Insider Threat Dataset r5.2 — dataset publik, dipakai mayoritas paper insider threat (Alzaabi & Mehmood 2024; Sherje et al. 2024) |
+| Analysis method | Uji statistik perbandingan (Mann-Whitney U atau t-test) untuk cek apakah perbedaan performa signifikan pada α = 0.05 |
 
-**Apakah rantai lengkap?** [ ] Ya / [ ] Tidak
+**Apakah rantai lengkap?** [ V ] Ya / [ ] Tidak
 > Jika tidak, tahap mana yang perlu direvisi? ______________
 
 ---
@@ -163,6 +191,6 @@ Lengkapi rantai dari RQ hingga metode analisis.
 
 > Ambil satu judul skripsi/paper yang pernah dibaca. Coba ekstrak RQ-nya. Apakah RQ tersebut memenuhi semua komponen (metode, metrik, baseline, konteks)? Jika tidak, apa yang hilang?
 
-**Judul:** _____________________________________________
-**RQ yang diekstrak:** __________________________________
-**Komponen yang hilang:** _______________________________
+**Judul:** "Insider Threat Detection Using Machine Learning Approach" — Alzaabi & Mehmood, IEEE Access 2024
+**RQ yang diekstrak:** Algoritma ML mana (RF, SVM, LSTM, Isolation Forest) yang paling efektif untuk deteksi insider threat pada CERT Dataset?
+**Komponen yang hilang:** Nggak ada baseline non-ML (rule-based SIEM) sebagai pembanding — jadi kita nggak tau seberapa jauh ML lebih baik dari sistem yang sekarang dipakai di industri. Ini justru yang jadi gap dan kita isi di penelitian ini.
