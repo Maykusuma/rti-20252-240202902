@@ -75,14 +75,10 @@ Hypothesis        : H0: Tidak ada perbedaan signifikan antara detection rate dan
 Tipe Eksperimen   : [ V ] Comparison  [ ] Ablation  [ ] Parameter
 
 Kondisi Eksperimen:
-| Kondisi   | Deskripsi              | IV Value       | CV Settings                          |
-|-----------|------------------------|----------------|--------------------------------------|
-| Control   | Rule-based SIEM dengan | model_type:    | Dataset: CERT r5.2, split 80:20,     |
-| (Kondisi  | threshold & correlation| siem           | seed: 42, threshold: sama,           |
-| A)        | rules standar          |                | preprocessing: identik, runs: 5      |
-| Treatment | Random Forest berbasis | model_type: rf | Dataset: CERT r5.2, split 80:20,     |
-| (Kondisi  | UEBA dengan fitur      |                | seed: 42, threshold: sama,           |
-| B)        | perilaku pengguna      |                | preprocessing: identik, runs: 5      |
+| Kondisi | Deskripsi | IV Value | CV Settings |
+|---------|-----------|----------|-------------|
+| Control | Rule-based SIEM dengan threshold & correlation rules standar | model_type:siem | Dataset: CERT r5.2, split 80:20, seed: 42, threshold: sama, preprocessing: identik, runs: 5 |
+| Treatment | Random Forest berbasis UEBA dengan fitur perilaku pengguna | model_type: rf | Dataset: CERT r5.2, split 80:20, seed: 42, threshold: sama, preprocessing: identik, runs: 5 |
 
 Fairness Checklist:
   [✓] Dataset identik — sama-sama CERT r5.2, split dan seed dikunci
@@ -92,24 +88,12 @@ Fairness Checklist:
   [✓] Metrik evaluasi sama — detection rate, FPR, waktu deteksi, F1-Score dihitung dengan formula yang persis sama di kedua kondisi
 
 Threat Analysis:
-| Threat Type | Ancaman Spesifik      | Mitigasi                        |
-|-------------|-----------------------|---------------------------------|
-| Internal    | Data leakage antara   | Gunakan stratified split,       |
-|             | train dan test set RF | validasi tidak ada overlap      |
-|             | bisa bocor            | antara train dan test           |
-| External    | CERT r5.2 adalah      | Acknowledge sebagai limitasi,   |
-|             | dataset sintetis —    | rekomendasikan validasi lanjut  |
-|             | belum tentu mewakili  | di enterprise nyata             |
-|             | enterprise nyata      |                                 |
-| Construct   | Waktu deteksi punya   | Definisikan waktu deteksi       |
-|             | definisi beda di SIEM | secara eksplisit sebelum        |
-|             | vs RF                 | eksperimen dan pakai definisi   |
-|             |                       | yang sama di kedua kondisi      |
-| Conclusion  | Sample size mungkin   | Jalankan 5 kali eksperimen,     |
-|             | tidak cukup untuk     | laporkan rata-rata dan          |
-|             | uji statistik yang    | standar deviasi, gunakan        |
-|             | kuat                  | Mann-Whitney U yang tidak       |
-|             |                       | mengasumsikan distribusi normal |
+| Threat Type | Ancaman Spesifik | Mitigasi |
+|-------------|-----------------|----------|
+| Internal    | Data leakage antara train dan test set RF bisa bocor | Gunakan stratified split, validasi tidak ada overlap antara train dan test |
+| External    | CERT r5.2 adalah dataset sintetis — belum tentu mewakili enterprise nyata | Acknowledge sebagai limitasi, rekomendasikan validasi lanjut di enterprise nyata |
+| Construct   | Waktu deteksi punya definisi beda di SIEM vs RF | Definisikan waktu deteksi secara eksplisit sebelum eksperimen dan pakai definisi yang sama di kedua kondisi |
+| Conclusion  | Sample size mungkin tidak cukup untuk uji statistik yang kuat | Jalankan 5 kali eksperimen, laporkan rata-rata dan standar deviasi, gunakan Mann-Whitney U yang tidak mengasumsikan distribusi normal |
 
 Statistical Plan:
   Uji statistik  : Mann-Whitney U test (primary), paired t-test (secondary jika distribusi normal)
