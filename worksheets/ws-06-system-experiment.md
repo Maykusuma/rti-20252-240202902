@@ -119,6 +119,7 @@ Gunakan RQ dan variabel dari WS-05. Petakan ke komponen sistem.
 | *Ukuran dataset* | *CV* | *Config File (experiment.yaml)* | *Dikunci — jumlah record sama di kedua kondisi* |
 | *Nilai threshold* | *Cv* | *Config File (experiment.yaml)* | *Dikunci — threshold sama di kedua kondisi, tidak boleh diubah* |
 | *Random seed & split* | *CV* | *Config File (experiment.yaml)* | *seed: 42, split: 80/20 dikunci agar eksperimen bisa direplikasi* |
+
 **Apakah semua variabel bisa di-map?** [ V ] Ya / [ ] Tidak
 
 ---
