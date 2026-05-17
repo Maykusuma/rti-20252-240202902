@@ -80,7 +80,8 @@ Jika variabel tidak bisa di-map ke komponen apapun → arsitektur perlu didesain
 ```
 SYSTEM-EXPERIMENT MAPPING
 
-Research Question: ____________________
+Research Question: Apakah Random Forest berbasis UEBA menghasilkan detection rate lebih tinggi dan false positive rate lebih rendah dibandingkan rule-based SIEM dalam
+                  mendeteksi insider threat tipe data exfiltrationpada CERT Insider Threat Dataset r5.2?
 
 Variable → Component Mapping:
 | Variabel | Tipe | Komponen Sistem | Cara Manipulasi/Pengukuran |
@@ -162,5 +163,4 @@ Jika sistem memiliki 3 komponen utama, rencanakan ablation study.
 > Apa risiko jika sistem dibangun seperti produk (monolitik, fitur lengkap) lalu baru dilakukan eksperimen? Mengapa arsitektur modular penting untuk riset?
 
 **Jawaban:**
-> ___________________________________________________
-> ___________________________________________________
+> Kalau sistem dibangun dulu sebagai produk yang monolitik — fitur lengkap, semua komponen nyambung satu sama lain, hardcoded di mana-mana — terus baru mau dicoba eksperimen, masalahnya adalah nggak bisa ganti satu hal tanpa ngaruh ke yang lain. Mau swap algoritmanya? Harus ubah kode di banyak tempat. Mau coba tanpa normalisasi? Harus korek-korek kode lagi. Hasilnya jadi susah dipercaya karena nggak bisa yakin perubahan yang terjadi itu akibat variabel yang mana. Makanya arsitektur modular itu penting banget di riset. Bukan soal kode yang rapi, tapi soal bisa buktiin bahwa perbedaan hasil itu beneran berasal dari variabel yang kamu manipulasi, bukan dari hal lain yang nggak sengaja ikut berubah.

@@ -157,8 +157,5 @@ Identifikasi ancaman validitas untuk desain eksperimen ini.
 
 **Jawaban:**
 1. Baseline-nya dipilih dengan jujur atau sengaja dipilih yang lemah?
-  Ini yang paling penting dicek duluan. Kalau baseline-nya adalah metode lama yang sudah diketahui jelek, atau versi yang tidak dioptimalkan sama sekali, kemenangan itu tidak bermakna. Baseline yang valid harus representatif, mewakili praktik terbaik yang sekarang dipakai di industri atau state-of-the-art dari literatur terbaru.
 2. Kondisi eksperimennya fair untuk semua metode?
-  Cek apakah dataset, preprocessing, tuning effort, dan environment-nya sama persis di semua kondisi. Kalau metode baru dapat 30 fitur tambahan dan hyperparameter tuning intensif sementara baseline cuma pakai default params, "mengalahkan" itu bukan karena metodenya lebih baik, tapi karena kondisinya nggak adil dari awal.
 3. Apakah perbedaannya signifikan secara statistik dan bukan cuma kebetulan?
-  Angka yang lebih tinggi belum tentu berarti lebih baik kalau selisihnya kecil dan cuma diuji sekali. Harus ada uji statistik yang tepat, effect size yang dilaporkan, dan eksperimen yang diulang beberapa kali untuk membuktikan bahwa hasilnya stabil dan bukan keberuntungan satu run saja.
