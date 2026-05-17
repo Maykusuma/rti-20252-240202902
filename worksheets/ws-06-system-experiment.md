@@ -80,8 +80,7 @@ Jika variabel tidak bisa di-map ke komponen apapun → arsitektur perlu didesain
 ```
 SYSTEM-EXPERIMENT MAPPING
 
-Research Question: Apakah Random Forest berbasis UEBA menghasilkan detection rate lebih tinggi dan false positive rate lebih rendah dibandingkan rule-based SIEM dalam
-                  mendeteksi insider threat tipe data exfiltrationpada CERT Insider Threat Dataset r5.2?
+Research Question: Apakah Random Forest berbasis UEBA menghasilkan detection rate lebih tinggi dan false positive rate lebih rendah dibandingkan rule-based SIEM dalam mendeteksi insider threat tipe data exfiltrationpada CERT Insider Threat Dataset r5.2?
 
 Variable → Component Mapping:
 | Variabel | Tipe | Komponen Sistem | Cara Manipulasi/Pengukuran |
@@ -91,15 +90,16 @@ Variable → Component Mapping:
 |          | CV   |                 |                           |
 
 4 Prinsip Desain:
-  [ ] Traceability — Setiap komponen bisa ditelusuri ke variabel
-  [ ] Variable Isolation — IV bisa diubah tanpa mengubah CV
-  [ ] Measurement Integration — Pengukuran DV built-in
-  [ ] Reproducibility — Setup bisa direkonstruksi
+  [✓] Traceability    — Setiap komponen bisa ditelusuri ke variabel riset
+  [✓] Variable Isolation   — IV (metode deteksi) bisa di-swap hanya dengan ganti satu baris config tanpa ubah modul lain
+  [✓] Measurement Integration     — Modul evaluasi built-in, langsung hitung confusion matrix & metrik otomatis setiap run
+  [✓] Reproducibility — Semua parameter ada di config file, seed ditetapkan, split data dikunci
 
 Experimental Setup:
-  Input data     : ____________________
-  Parameter      : ____________________
-  Output format  : ____________________
+  Input data   : CERT Insider Threat Dataset r5.2, sudah dipreprocess (missing value dibersihkan, fitur dinormalisasi, split 80:20
+                train/test dikunci)
+  Parameter    : model_type, threshold, random_seed: 42, train_test_split: 0.8, n_runs: 5
+  Output format: CSV per run berisi confusion matrix + detection rate + FPR + waktu deteksi + F1-Score
 ```
 
 ---
@@ -108,16 +108,18 @@ Experimental Setup:
 
 Gunakan RQ dan variabel dari WS-05. Petakan ke komponen sistem.
 
-**RQ:** __________________________________________________
+**RQ:** Apakah Random Forest berbasis UEBA menghasilkan detection rate lebih tinggi dan false positive rate lebih rendah dibandingkan rule-based SIEM dalam mendeteksi insider threat tipe data exfiltration pada CERT Insider Threat Dataset r5.2?
 
 | Variabel | Tipe | Komponen Sistem | Cara Manipulasi / Pengukuran |
 |----------|------|-----------------|---------------------------|
-| *Contoh: Jenis model* | *IV* | *Modul classifier (swap RF ↔ CNN)* | *Ganti config `model_type`* |
-| | DV | | |
-| | CV | | |
-
-**Apakah semua variabel bisa di-map?** [ ] Ya / [ ] Tidak
-> Jika tidak, komponen apa yang perlu ditambahkan? _________
+| *Metode deteksi (SIEM vs RF)* | *IV* | *Modul Classifier — bisa di-swap antara rule-based SIEM dan Random Forest* | *Ganti satu baris di config: model_type: siem atau model_type: rf`* |
+| *Detection rate* | DV | *Modul Evaluasi — Metrics Collector* | *Dihitung otomatis dari TP/(TP+FN) setiap eksperimen selesai* |
+| *False positive rate* | DV | *Modul Evaluasi — Metrics Collector* | *Dihitung otomatis dari FP/(FP+TN) setiap eksperimen selesai* |
+| *Waktu deteksi* | *DV* | *Modul Evaluasi — Timer* | *Dicatat otomatis dari timestamp event masuk sampai alert keluar* |
+| *Ukuran dataset* | *CV* | *Config File (experiment.yaml)* | *Dikunci — jumlah record sama di kedua kondisi* |
+| *Nilai threshold* | *Cv* | *Config File (experiment.yaml)* | *Dikunci — threshold sama di kedua kondisi, tidak boleh diubah* |
+| *Random seed & split* | *CV* | *Config File (experiment.yaml)* | *seed: 42, split: 80/20 dikunci agar eksperimen bisa direplikasi* |
+**Apakah semua variabel bisa di-map?** [ V ] Ya / [ ] Tidak
 
 ---
 
@@ -127,14 +129,14 @@ Evaluasi desain sistem terhadap 4 prinsip.
 
 | Prinsip | Status | Bukti / Penjelasan |
 |---------|--------|-------------------|
-| Traceability | *Contoh: ✅ — setiap modul punya label variabel* | |
-| Modularity | | |
-| Controllability | | |
-| Measurability | | |
+| Traceability | *✅* | Setiap komponen punya label variabel yang jelas — Modul Classifier = IV, Modul Evaluasi = DV, Config File = CV. Kalau ada pertanyaan "komponen ini buat apa?", langsung bisa dijawab dengan variabelnya |
+| Modularity | *✅* | *IV bisa di-swap hanya dengan ganti satu baris config (model_type) tanpa menyentuh Modul Evaluasi atau preprocessing sama sekali — persis seperti prinsip yang dicontohkan di materi* |
+| Controllability | *✅* | *Semua CV dieksternalisasi ke experiment.yaml — threshold, seed, split, jumlah run semuanya ada di satu file config yang dikunci sebelum eksperimen dimulai* |
+| Measurability | *✅* | *Modul Evaluasi built-in dan jalan otomatis setiap run selesai — output langsung berupa CSV berisi semua metrik yang dibutuhkan tanpa perlu hitung manual* |
 
-**Prinsip mana yang paling sulit dipenuhi?** _______________
+**Prinsip mana yang paling sulit dipenuhi?** Measurability untuk waktu deteksi
 **Strategi untuk mengatasinya:**
-> ___________________________________________________
+> Waktu deteksi di rule-based SIEM dan Random Forest punya definisi yang sedikit beda — SIEM kasih alert berbasis rule match, RF kasih prediksi setelah seluruh data diproses. Solusinya: pasang timer yang mulai jalan dari event pertama masuk ke sistem sampai output klasifikasi keluar, dan pakai definisi yang sama persis di kedua kondisi. Dokumentasikan definisi ini sebelum eksperimen jalan biar nggak ada ambiguitas.
 
 ---
 
@@ -147,14 +149,14 @@ Jika sistem memiliki 3 komponen utama, rencanakan ablation study.
 
 | Kondisi | Komponen A | Komponen B | Komponen C | Hasil yang Diharapkan |
 |---------|-----------|-----------|-----------|----------------------|
-| Full | *Contoh: ✅ CNN* | *Contoh: ✅ Temporal features* | *Contoh: ✅ Z-score norm* | *Baseline penuh* |
-| – A | ❌ (ganti RF) | ✅ | ✅ | |
-| – B | ✅ | ❌ (tanpa temporal) | ✅ | |
-| – C | ✅ | ✅ | ❌ (tanpa normalisasi) | |
+| Full | *✅ RF* | *✅ UEBA features* | *✅ Normalisasi* | *Performa terbaik RF — ini kondisi B utama* |
+| – A | *❌ Ganti ke rule-based SIEM* | ✅ | ✅ | *Kondisi A baseline — seberapa jauh RF lebih baik dari SIEM* |
+| – B | *✅RF* | *❌ Tanpa UEBA features (pakai fitur raw saja)* | *✅* | *Seberapa besar kontribusi feature engineering berbasis UEBA terhadap performa RF* |
+| – C | *✅RF* | ✅ | *❌ tanpa normalisasi* | Seberapa besar preprocessing mempengaruhi performa RF |
 
-**Komponen mana yang diprediksi paling berkontribusi?** _____
+**Komponen mana yang diprediksi paling berkontribusi?** Komponen B — Feature Engineering berbasis UEBA
 **Mengapa?**
-> ___________________________________________________
+> Karena inti dari UEBA itu justru ada di fiturnya — cara sistem "belajar" pola perilaku normal pengguna ditentukan oleh seberapa informatif fitur yang dimasukkan ke model. Kalau fitur UEBA-nya dicopot dan diganti fitur raw biasa, Random Forest jadi kehilangan "kecerdasannya" dalam membedakan perilaku normal vs mencurigakan, dan performanya diprediksi akan turun signifikan. Ini juga yang belum pernah dieksplorasi di paper-paper yang kita review sebelumnya.
 
 ---
 
